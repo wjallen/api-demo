@@ -1,0 +1,13 @@
+FROM python:3.9
+
+RUN pip3 install Flask==2.0.3 \
+                 redis==4.1.4 \
+                 hotqueue==0.2.8
+
+COPY ./src/* /app/
+COPY ./ML_Data_Sample.json /app/ML_Data_Sample.json
+
+WORKDIR /app/
+ENTRYPOINT ["python3"]
+CMD ["api.py"]
+
