@@ -1,61 +1,8 @@
 import json
 from flask import Flask, request
-from jobs import rd, q, add_job, get_job_by_id
+from jobs import add_job, get_job_by_id
 
 app = Flask(__name__)
-
-
-@app.route('/', methods=['GET'])
-def info():
-    """
-    Informational
-    """
-
-    return """
-  Try the following routes:
-
-  /                GET    informational
-  /data            GET    read data in database
-  /data            POST   upload data to database
-    
-  /jobs            GET    info on how to submit job
-  /jobs            POST   submit job
-  /jobs/<jobid>    GET    info on job
-
-"""
-
-
-@app.route('/data', methods=['POST', 'GET'])
-def download_data(): 
-    """
-    API route for adding raw meteorite landing data to the dabase.
-    """
-    if request.method == 'POST':
-
-        rd.flushdb()
-
-        with open('ML_Data_Sample.json', 'r') as f:
-            ml_data = json.load(f)
-
-        for item in ml_data['meteorite_landings']:
-            rd.set(item['id'], json.dumps(item))
-
-        return 'Data has been loaded to Redis from file\n'
-
-    elif request.method == 'GET':
-
-        list_of_data = []
-
-        for item in rd.keys():
-            list_of_data.append(json.loads(rd.get(item)))
-
-        return (f'{json.dumps(list_of_data, indent=2)}\n')
-
-    else:
-
-        return 'Only supports POST and GET methods\n'
-
-
 
 @app.route('/jobs', methods=['POST', 'GET'])
 def jobs_api():
@@ -74,7 +21,7 @@ def jobs_api():
     elif request.method == 'GET':
         return """
   To submit a job, do the following:
-  curl localhost:5041/jobs -X POST -d '{"start":1, "end":2}' -H "Content-Type: application/json"
+  curl localhost:5000/jobs -X POST -d '{"start":1, "end":2}' -H "Content-Type: application/json"
 
 """
 
@@ -87,5 +34,5 @@ def get_job_result(job_uuid):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
