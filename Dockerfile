@@ -5,4 +5,4 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip3 install -r ./requirements.txt
 
-COPY api.py worker.py jobs.py ./
+COPY src/api.py src/worker.py src/jobs.py ./

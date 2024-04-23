@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-test-deployment
+  labels:
+    app: myapp-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp-test
+  template:
+    metadata:
+      labels:
+        app: myapp-test
+    spec:
+      containers:
+        - name: hellos
+          image: ubuntu:22.04
+          command: ['sh', '-c', 'echo "Hello, Kubernetes!" >> /data/out.txt && sleep 3600']
+          volumeMounts:
+          - name: myapp-test
+            mountPath: "/data"
+      volumes:
+      - name: myapp-test
+        persistentVolumeClaim:
+          claimName: myapp-test
+
