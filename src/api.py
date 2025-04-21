@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 from flask import Flask, request
 from jobs import add_job, get_job_by_id
