@@ -11,46 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
+     - name: Check out the repo
+       uses: actions/checkout@v3
 
-      - name: Stage the data
-        run: wget https://raw.githubusercontent.com/wjallen/coe332-sample-data/main/ML_Data_Sample.json
-      
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta-api
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: wjallen/mldata-api
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          file: ./docker/Dockerfile.api
-          tags: ${{ steps.meta-api.outputs.tags }}
-          labels: ${{ steps.meta-api.outputs.labels }}
+     - name: Log in to Docker Hub
+       uses: docker/login-action@v3
+       with:
+         username: ${{ secrets.DOCKERHUB_USERNAME }}
+         password: ${{ secrets.DOCKERHUB_PASSWORD }} 
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta-wrk
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: wjallen/mldata-wrk
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          file: ./docker/Dockerfile.wrk
-          tags: ${{ steps.meta-wrk.outputs.tags }}
-          labels: ${{ steps.meta-wrk.outputs.labels }}
+     - name: Set up Docker Buildx
+       uses: docker/setup-buildx-action@v3
 
+     - name: Extract metadata (tags, labels) for Docker
+       id: meta-data
+       uses: docker/metadata-action@v5
+       with:
+         images: wjallen/demo-app 
+
+     - name: Build and push Docker image
+       uses: docker/build-push-action@v5
+       with:
+         context: .
+         push: true
+         file: ./Dockerfile
+         tags: ${{ steps.meta-data.outputs.tags }}
+         labels: ${{ steps.meta-data.outputs.labels }} 
 
