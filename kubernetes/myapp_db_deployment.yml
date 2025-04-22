@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-db-deployment
+  labels:
+    app: myapp-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp-db
+  template:
+    metadata:
+      labels:
+        app: myapp-db
+    spec:
+      containers:
+        - name: myapp-db
+          image: redis:7
+          command: ["redis-server"]
+          volumeMounts:
+          - name: myapp-data
+            mountPath: "/data"
+      volumes:
+      - name: myapp-data
+        persistentVolumeClaim:
+          claimName: myapp-data
+

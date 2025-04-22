@@ -1,6 +1,4 @@
 ---
-version: "3"
-
 services:
     redis-db:
         image: redis:7
@@ -16,15 +14,20 @@ services:
             dockerfile: ./Dockerfile
         depends_on:
             - redis-db
-        image: wjallen/flask-app:1.0
+        image: wjallen/demo-app:1.0
         ports:
             - 5000:5000
+        environment:
+            - REDIS_IP=redis-db
         command: ["python3", "api.py"]
     worker:
         build:
             context: ./
             dockerfile: ./Dockerfile
+        scale: 3
         depends_on:
             - redis-db
-        image: wjallen/flask-app:1.0
+        image: wjallen/demo-app:1.0
+        environment:
+            - REDIS_IP=redis-db
         command: ["python3", "worker.py"]

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: myapp-test
+  name: myapp-data
 spec:
   accessModes:
     - ReadWriteOnce

@@ -1,9 +1,10 @@
 import json
+import os
 import uuid
 import redis
 from hotqueue import HotQueue
 
-_redis_ip='redis-db'
+_redis_ip=os.environ.get('REDIS_IP', 'localhost')
 _redis_port='6379'
 
 rd = redis.Redis(host=_redis_ip, port=6379, db=0)

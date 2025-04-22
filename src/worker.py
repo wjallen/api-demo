@@ -9,7 +9,7 @@ logging.basicConfig(level='INFO')
 def execute_job(jid):
     update_job_status(jid, 'in progress')
     logging.info(f'starting job {jdb.get(jid)}')
-    time.sleep(15)
+    time.sleep(5)
     update_job_status(jid, 'complete')
     logging.info(f'completed job {jdb.get(jid)}')
 

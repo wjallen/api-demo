@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 import json
 from flask import Flask, request
-from jobs import add_job, get_job_by_id
+from jobs import add_job, get_job_by_id, jdb
 
 app = Flask(__name__)
+
+@app.route('/help', methods=['GET'])
+def help():
+        return """
+  To submit a job, do the following:
+  curl localhost:5000/jobs -X POST -d '{"start":1, "end":2}' -H "Content-Type: application/json"
+
+"""
 
 @app.route('/jobs', methods=['POST', 'GET'])
 def jobs_api():
@@ -20,11 +28,7 @@ def jobs_api():
         return json.dumps(add_job(job['start'], job['end']), indent=2) + '\n'
 
     elif request.method == 'GET':
-        return """
-  To submit a job, do the following:
-  curl localhost:5000/jobs -X POST -d '{"start":1, "end":2}' -H "Content-Type: application/json"
-
-"""
+        return json.dumps([item.decode() for item in jdb.keys()], indent=2)
 
 @app.route('/jobs/<job_uuid>', methods=['GET'])
 def get_job_result(job_uuid):
