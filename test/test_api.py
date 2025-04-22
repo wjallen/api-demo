@@ -15,13 +15,22 @@ api_prefix = f'http://{api_host}:{api_port}'
 
 
 
-def test_jobs_info():
-    route = f'{api_prefix}/jobs'
+def test_help_info():
+    route = f'{api_prefix}/help'
     response = requests.get(route)
 
     assert response.ok == True
     assert response.status_code == 200
     assert bool(re.search('To submit a job,', response.text)) == True
+
+
+def test_get_jobs():
+    route = f'{api_prefix}/jobs'
+    response = requests.get(route)
+
+    assert response.ok == True
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
 
 
 def test_jobs_cycle():

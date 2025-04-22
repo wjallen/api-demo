@@ -9,46 +9,24 @@ jobs:
     - name: Check out repo
       uses: actions/checkout@v3
 
-    - name: Stage the data
-      run: wget https://raw.githubusercontent.com/wjallen/coe332-sample-data/main/ML_Data_Sample.json
-
-    - name: Create docker bridge network
-      run: docker network create API-DB-WRK
-
-    - name: Set up a database
+    - name: Start containers
       run: |
         mkdir ./data/
-        docker run --name redis-db --network API-DB-WRK -p 6441:6379 -d -v ${PWD}/data:/data redis:6 --save 1 1
-
-    - name: Build and run the API
-      run: |
-        docker build -f docker/Dockerfile.api -t api:test .
-        docker run --name api-test --network API-DB-WRK -p 5041:5000 -d --env REDIS_IP=${RIP}  api:test
-      env:
-        RIP: redis-db
-
-    - name: Build and run the worker
-      run: |
-        docker build -f docker/Dockerfile.wrk -t wrk:test .
-        docker run --name wrk-test --network API-DB-WRK -d --env REDIS_IP=${RIP} wrk:test
-      env:
-        RIP: redis-db
+        docker compose up --build -d
 
     - name: Set up Python 
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
-        python-version: "3.9"
+        python-version: "3.12"
 
     - name: Install dependencies
-      run: pip3 install pytest==7.0.0 requests==2.27.1
+      run: pip3 install pytest==7.4.* requests==2.*
 
     - name: Run pytest
       run: pytest 
 
-    - name: Stop images
+    - name: Stop images and clean up
       run: |
-        docker stop wrk-test && docker rm -f wrk test
-        docker stop api-test && docker rm -f api-test
-        docker stop redis-db && docker rm -f redis-db
-        docker network rm API-DB-WRK
+        docker compose down
+        rm -rf ./data/
 
