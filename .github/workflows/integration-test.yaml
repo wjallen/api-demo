@@ -10,9 +10,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Start containers
-      run: |
-        mkdir ./data/
-        docker compose up --build -d
+      run: docker compose up --build -d
 
     - name: Set up Python 
       uses: actions/setup-python@v4
@@ -26,7 +24,5 @@ jobs:
       run: pytest 
 
     - name: Stop images and clean up
-      run: |
-        docker compose down
-        rm -rf ./data/
+      run: docker compose down
 
