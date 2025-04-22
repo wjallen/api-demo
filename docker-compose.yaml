@@ -24,7 +24,7 @@ services:
         build:
             context: ./
             dockerfile: ./Dockerfile
-        scale: 3
+        scale: 1
         depends_on:
             - redis-db
         image: wjallen/demo-app:1.0
