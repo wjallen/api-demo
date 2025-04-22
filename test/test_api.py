@@ -24,6 +24,17 @@ def test_help_info():
     assert bool(re.search('To submit a job,', response.text)) == True
 
 
+def test_hello():
+    route = f'{api_prefix}/hello'
+    response = requests.get(route)
+
+    assert response.ok == True
+    assert response.status_code == 200
+    assert isinstance(response.json(), dict)
+
+
+
+
 def test_get_jobs():
     route = f'{api_prefix}/jobs'
     response = requests.get(route)

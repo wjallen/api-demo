@@ -13,6 +13,10 @@ def help():
 
 """
 
+@app.route('/hello', methods=['GET'])
+def hello():
+    return {'result': 'hello'}
+
 @app.route('/jobs', methods=['POST', 'GET'])
 def jobs_api():
     """
