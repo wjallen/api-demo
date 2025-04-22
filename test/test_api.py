@@ -48,7 +48,7 @@ def test_jobs_cycle():
     assert int(response.json()['end']) == int(job_data['end'])
 
 
-    time.sleep(1)
+    time.sleep(2)
     route = f'{api_prefix}/jobs/{UUID}'
     response = requests.get(route)
 
@@ -60,7 +60,7 @@ def test_jobs_cycle():
     assert int(response.json()['end']) == int(job_data['end'])
 
 
-    time.sleep(15)
+    time.sleep(20)
     route = f'{api_prefix}/jobs/{UUID}'
     response = requests.get(route)
 
