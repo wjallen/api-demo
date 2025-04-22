@@ -18,7 +18,7 @@ spec:
       containers:
         - name: api
           imagePullPolicy: Always
-          image: wjallen/demo-app:1.0
+          image: wjallen/demo-app:1.1
           command: ['python3', 'api.py']
           env:
           - name: REDIS_IP
