@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json
-from flask import Flask, request
-from jobs import add_job, get_job_by_id, jdb
+from flask import Flask, request, send_file
+from jobs import add_job, get_job_by_id, jdb, results
 
 app = Flask(__name__)
 
@@ -40,6 +40,18 @@ def get_job_result(job_uuid):
     API route for checking on the status of a submitted job
     """
     return json.dumps(get_job_by_id(job_uuid), indent=2) + '\n'
+
+
+@app.route('/results-img/<job_uuid>', methods=['GET'])
+def get_result_image(job_uuid):
+    path=f'/app/{job_uuid}.png'
+    with open(path, 'wb') as f:
+        f.write( results.hget(job_uuid, 'image') )
+    return send_file(path, mimetype='image/png', as_attachment=True)
+
+@app.route('/results-dat/<job_uuid>', methods=['GET'])
+def get_result_data(job_uuid):
+    return results.hget(job_uuid, 'data')
 
 
 if __name__ == "__main__":

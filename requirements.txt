@@ -3,3 +3,4 @@ hotqueue==0.2.*
 pytest==7.4.*
 redis==5.2.*
 requests==2.*
+matplotlib

@@ -7,9 +7,10 @@ from hotqueue import HotQueue
 _redis_ip=os.environ.get('REDIS_IP', 'localhost')
 _redis_port='6379'
 
-rd = redis.Redis(host=_redis_ip, port=6379, db=0)
-q = HotQueue("queue", host=_redis_ip, port=6379, db=1)
-jdb = redis.Redis(host=_redis_ip, port=6379, db=2)
+rd = redis.Redis(host=_redis_ip, port=_redis_port, db=0)
+q = HotQueue("queue", host=_redis_ip, port=_redis_port, db=1)
+jdb = redis.Redis(host=_redis_ip, port=_redis_port, db=2)
+results = redis.Redis(host=_redis_ip, port=_redis_port, db=3)
 
 
 def _generate_jid():
